@@ -1,3 +1,5 @@
+#![windows_subsystem = "windows"]
+
 use windows::Win32::Storage::FileSystem;
 use core::time;
 use std::{fs, io, process};
@@ -11,12 +13,12 @@ use eframe::egui;
 use std::thread;
 use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 
-// TODO: Change to arr of tuple<url, local_path>
 const BEP_IN_EX_URL: &'static str = "https://thunderstore.io/package/download/denikson/BepInExPack_Valheim/5.4.2202/";
-const NUM_URLS: usize = 2;
+const NUM_URLS: usize = 3;
 const URLS: [(&'static str, &'static str); NUM_URLS] = [
     ("https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/ServerSideMap.zip", "\\BepInEx\\plugins"),
-    ("https://thunderstore.io/package/download/Smoothbrain/Jewelcrafting/1.5.19/", "\\BepInEx\\plugins"),
+    ("https://thunderstore.io/package/download/Advize/PlantEverything/1.16.4/", "\\BepInEx\\plugins"),
+    ("https://thunderstore.io/package/download/Smoothbrain/Sailing/1.1.7/", "\\BepInEx\\plugins"),
     ];
 const TOTAL_PROGRESS: usize = 4 + NUM_URLS;
 
@@ -230,7 +232,6 @@ fn download_bepinex(dest_dir_path: String) -> Result<(), std::io::Error>
     let bepinex_path = temp_dir.path().join("BepInExPack_Valheim");
     println!("Copying contents in {:?} to '{:?}'.", bepinex_path.display(), dest_dir_path);
     copy_dir_all(bepinex_path, dest_dir_path)?;
-    
 
     Ok(())
 }
