@@ -15,11 +15,7 @@ use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 
 const BEP_IN_EX_URL: &'static str = "https://thunderstore.io/package/download/denikson/BepInExPack_Valheim/5.4.2202/";
 const NUM_URLS: usize = 3;
-const URLS: [(&'static str, &'static str); NUM_URLS] = [
-    ("https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/ServerSideMap.zip", "\\BepInEx\\plugins"),
-    ("https://thunderstore.io/package/download/Advize/PlantEverything/1.16.4/", "\\BepInEx\\plugins"),
-    ("https://thunderstore.io/package/download/Smoothbrain/Sailing/1.1.7/", "\\BepInEx\\plugins"),
-    ];
+
 const TOTAL_PROGRESS: usize = 4 + NUM_URLS;
 
 static RUNNING: AtomicBool = AtomicBool::new(false);
@@ -182,7 +178,7 @@ fn install() -> Result<(), std::io::Error> {
             PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
 
             // Download and extract BepInEx 
-            match download_bepinex(valheim.clone()) {
+            match download_zip(&BEP_IN_EX_URL, vec![("BepInExPack_Valheim", "")], &valheim.clone()) {
                 Ok(..) => {}
                 Err(e) => { println!("Error while downloading BepInEx: {:?}", e)}
             }
@@ -208,15 +204,14 @@ fn install() -> Result<(), std::io::Error> {
             PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
 
             // Download the rest of the mods
-            for url in URLS {
-                // Get dest path
-                let dest = valheim.clone() + url.1;
-                if let Err(e) = fs::create_dir_all(dest.clone()) {
-                    println!("Error while creating dir to dest: {:?}. Error: {:?}", dest.clone(), e);
-                    return Err(e);
-                }
+            let urls: [(&'static str, Vec<(&'static str, &'static str)>); NUM_URLS] = [
+                ("https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/ServerSideMap.zip", vec![("*", "BepInEx\\plugins"),]),
+                ("https://thunderstore.io/package/download/Advize/PlantEverything/1.16.4/", vec![("*", "BepInEx\\plugins"),]),
+                ("https://thunderstore.io/package/download/Smoothbrain/Sailing/1.1.7/", vec![("*", "BepInEx\\plugins"),]),
+            ];
 
-                match download_zip(url.0, dest) {
+            for url in urls {
+                match download_zip(url.0, url.1, &valheim.clone()) {
                     Ok(..) => {}
                     Err(e) => { println!("{:?}", e) }
                 }
@@ -224,25 +219,16 @@ fn install() -> Result<(), std::io::Error> {
                 PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
             }
         }
-        None => { println!("Valheim directory was not found. Exiting...") }
+        None => { 
+            println!("Valheim directory was not found. Exiting...");
+            return Err(std::io::Error::new(io::ErrorKind::InvalidInput, "Valheim directory was not found. Exiting..."));
+        }
     }
 
     Ok(())
 }
 
-fn download_bepinex(dest_dir_path: String) -> Result<(), std::io::Error>
-{
-    let temp_dir = tempfile::TempDir::new()?;
-    download_zip(BEP_IN_EX_URL, temp_dir.path().to_str().unwrap().to_owned())?;
-
-    let bepinex_path = temp_dir.path().join("BepInExPack_Valheim");
-    println!("Copying contents in {:?} to '{:?}'.", bepinex_path.display(), dest_dir_path);
-    copy_dir_all(bepinex_path, dest_dir_path)?;
-
-    Ok(())
-}
-
-fn download_zip(src_url: &str, dest_dir_path: String) -> Result<(), std::io::Error>
+fn download_zip(src_url: &str, move_from_to: Vec<(&str, &str)>, base_dest_path: &str ) -> Result<(), std::io::Error>
 {
     let get_resp: Result<ureq::Response, ureq::Error> = ureq::get(src_url) 
         .set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8")
@@ -272,11 +258,32 @@ fn download_zip(src_url: &str, dest_dir_path: String) -> Result<(), std::io::Err
             zip.extract(zip_dir_path)?;
             println!("Extracting to '{}'.", zip_dir_path.display());
 
-            let file_path = Path::new(&dest_dir_path);
+            for (from, to) in move_from_to {
+                let dest = Path::new(base_dest_path).join(to);
+                if let Err(e) = fs::create_dir_all(dest.clone()) {
+                    println!("Error while creating dir to dest: {:?}. Error: {:?}", dest.clone(), e);
+                    return Err(e);
+                }
 
-            copy_dir_all(zip_dir_path, file_path)?;
-            println!("Copying contents in {:?} to '{:?}'.", zip_dir_path.display(), file_path.display());
+                if from == "*" {
+                    copy_dir_all(zip_dir_path, dest.clone())?;
+                    println!("Copying contents in {:?} to '{:?}'.", zip_dir_path.display(), dest.display());
+                } else {
+                    let src = Path::new(zip_dir_path).join(from);
+                    if src.is_dir() {
+                        copy_dir_all(src.clone(), dest.clone())?;
+                        println!("Copying contents in {:?} to '{:?}'.", src.display(), dest.display());
+                    } else {
+                        let dest_file_str = dest.to_str().unwrap().to_string().to_owned() + "\\" + src.file_name().unwrap().to_str().unwrap();
+                        let dest_file = Path::new(&dest_file_str);
+                        fs::copy(src.clone(), dest_file)?;
+                        println!("Copying {:?} to '{:?}'.", src.display(), dest_file.display());
+                    }
 
+                }
+            }
+
+            // Remove temps
             fs::remove_file(temp_file.path())?;
             println!("Removing temp zipped file {:?}", temp_file.path().display());
 
