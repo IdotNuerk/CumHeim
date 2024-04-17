@@ -38,34 +38,40 @@ fn app() -> Result<(), eframe::Error> {
 
     eframe::run_simple_native("Cumheim Installer", options, move |ctx, _frame| {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.style_mut().text_styles.insert(
-                egui::TextStyle::Button, 
-                egui::FontId::new(36.0, eframe::epaint::FontFamily::Proportional),
-            );
-            let install_button = ui.add_enabled(!RUNNING.load(Ordering::Acquire), egui::Button::new("Install"));
-            let uninstall_button = ui.add_enabled(!RUNNING.load(Ordering::Acquire), egui::Button::new("Uninstall"));
 
-            let install_resp = install_button.interact(egui::Sense::click());
-            let uninstall_resp = uninstall_button.interact(egui::Sense::click());
-            if install_resp.clicked() {
-                RUNNING.store(true, Ordering::Release);
-                thread::spawn(|| {
-                    match install() {
-                        Ok(..) => {}
-                        Err(e) => { println!("{:?}", e) }
-                    };
-                });
-            }
+            ui.horizontal(|ui| {
+                ui.style_mut().text_styles.insert(
+                    egui::TextStyle::Button, 
+                    egui::FontId::new(36.0, eframe::epaint::FontFamily::Proportional),
+                );
 
-            if uninstall_resp.clicked() {
-                RUNNING.store(true, Ordering::Release);
-                thread::spawn(|| {
-                    match uninstall() {
-                        Ok(..) => {}
-                        Err(e) => { println!("{:?}", e) }
-                    };
+                ui.vertical(|buttons_ui| {
+                    let install_button = buttons_ui.add_enabled(!RUNNING.load(Ordering::Acquire), egui::Button::new("Install"));
+                    let uninstall_button = buttons_ui.add_enabled(!RUNNING.load(Ordering::Acquire), egui::Button::new("Uninstall"));
+    
+                    let install_resp = install_button.interact(egui::Sense::click());
+                    let uninstall_resp = uninstall_button.interact(egui::Sense::click());
+                    if install_resp.clicked() {
+                        RUNNING.store(true, Ordering::Release);
+                        thread::spawn(|| {
+                            match install() {
+                                Ok(..) => {}
+                                Err(e) => { println!("{:?}", e) }
+                            };
+                        });
+                    }
+    
+                    if uninstall_resp.clicked() {
+                        RUNNING.store(true, Ordering::Release);
+                        thread::spawn(|| {
+                            match uninstall() {
+                                Ok(..) => {}
+                                Err(e) => { println!("{:?}", e) }
+                            };
+                        });
+                    }
                 });
-            }
+            });
         });
 
         let bottom_panel = egui::TopBottomPanel::bottom(egui::Id::new("BottomPanel"))
