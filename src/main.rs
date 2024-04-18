@@ -1,5 +1,4 @@
 #![windows_subsystem = "windows"]
-
 use windows::Win32::Storage::FileSystem;
 use core::time;
 use std::{fs, io, process};
@@ -12,10 +11,10 @@ use tempfile::{self, NamedTempFile};
 use eframe::egui;
 use std::thread;
 use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+mod settings;
 
-const BEP_IN_EX_URL: &'static str = "https://thunderstore.io/package/download/denikson/BepInExPack_Valheim/5.4.2202/";
 const NUM_URLS: usize = 3;
-
+const MODS_JSON: &'static str = "mods.json";
 const TOTAL_PROGRESS: usize = 4 + NUM_URLS;
 
 static RUNNING: AtomicBool = AtomicBool::new(false);
@@ -177,8 +176,11 @@ fn install() -> Result<(), std::io::Error> {
 
             PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
 
+            // Fill settings from file
+            let settings = settings::Settings::read_from_file(MODS_JSON).unwrap();
+
             // Download and extract BepInEx 
-            match download_zip(&BEP_IN_EX_URL, vec![("BepInExPack_Valheim", "")], &valheim.clone()) {
+            match download_zip(&settings.bepinex.url, vec!(settings.bepinex.mapping), &valheim.clone()) {
                 Ok(..) => {}
                 Err(e) => { println!("Error while downloading BepInEx: {:?}", e)}
             }
@@ -204,14 +206,8 @@ fn install() -> Result<(), std::io::Error> {
             PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
 
             // Download the rest of the mods
-            let urls: [(&'static str, Vec<(&'static str, &'static str)>); NUM_URLS] = [
-                ("https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/ServerSideMap.zip", vec![("*", "BepInEx\\plugins"),]),
-                ("https://thunderstore.io/package/download/Advize/PlantEverything/1.16.4/", vec![("*", "BepInEx\\plugins"),]),
-                ("https://thunderstore.io/package/download/Smoothbrain/Sailing/1.1.7/", vec![("*", "BepInEx\\plugins"),]),
-            ];
-
-            for url in urls {
-                match download_zip(url.0, url.1, &valheim.clone()) {
+            for m in settings.mods {
+                match download_zip(&m.url, m.mapping, &valheim.clone()) {
                     Ok(..) => {}
                     Err(e) => { println!("{:?}", e) }
                 }
@@ -228,8 +224,7 @@ fn install() -> Result<(), std::io::Error> {
     Ok(())
 }
 
-fn download_zip(src_url: &str, move_from_to: Vec<(&str, &str)>, base_dest_path: &str ) -> Result<(), std::io::Error>
-{
+fn download_zip(src_url: &str, move_from_to: Vec<Vec<String>>, base_dest_path: &str ) -> Result<(), std::io::Error> {
     let get_resp: Result<ureq::Response, ureq::Error> = ureq::get(src_url) 
         .set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8")
         .call();
@@ -258,7 +253,9 @@ fn download_zip(src_url: &str, move_from_to: Vec<(&str, &str)>, base_dest_path: 
             zip.extract(zip_dir_path)?;
             println!("Extracting to '{}'.", zip_dir_path.display());
 
-            for (from, to) in move_from_to {
+            for mapping in move_from_to {
+                let from = mapping[0].clone();
+                let to = mapping[1].clone();
                 let dest = Path::new(base_dest_path).join(to);
                 if let Err(e) = fs::create_dir_all(dest.clone()) {
                     println!("Error while creating dir to dest: {:?}. Error: {:?}", dest.clone(), e);
@@ -310,8 +307,7 @@ fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> std::io::Result
     Ok(())
 }
 
-fn get_drives() -> Vec<String>
-{
+fn get_drives() -> Vec<String> {
     let mut drive_roots: Vec<String> = Vec::new();
     unsafe {
         let drives_bitmask = FileSystem::GetLogicalDrives();
@@ -327,8 +323,7 @@ fn get_drives() -> Vec<String>
     drive_roots
 }
 
-fn find_steamapps(dir: &Path, depth: u32) -> Option<String>
-{
+fn find_steamapps(dir: &Path, depth: u32) -> Option<String> {
     if depth > 3 {
         return None;
     }

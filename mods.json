@@ -1,0 +1,38 @@
+{
+    "bepinex": {
+      "url": "https://thunderstore.io/package/download/denikson/BepInExPack_Valheim/5.4.2202/",
+      "mapping": [
+        "BepInExPack_Valheim",
+        ""
+      ]
+    },
+    "mods": [
+      {
+        "url": "https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/ServerSideMap.zip",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/Advize/PlantEverything/1.16.4/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/Smoothbrain/Sailing/1.1.7/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
+      }
+    ]
+  }
