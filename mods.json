@@ -8,6 +8,15 @@
     },
     "mods": [
       {
+        "url": "https://thunderstore.io/package/download/ValheimModding/Jotunn/2.19.2/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins\\Jotunn"
+          ]
+        ]
+      },
+      {
         "url": "https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/ServerSideMap.zip",
         "mapping": [
           [
@@ -31,6 +40,24 @@
           [
             "*",
             "BepInEx\\plugins"
+          ]
+        ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/Smoothbrain/ServerCharacters/1.4.11/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/MSchmoecker/MultiUserChest/0.5.10/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins\\MultiUserChest"
           ]
         ]
       }
