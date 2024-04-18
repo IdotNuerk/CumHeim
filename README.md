@@ -6,6 +6,8 @@ Downloads and installs / uninstalls the following mods to your local Valheim dir
 - [ServerSideMap](https://github.com/Mydayyy/Valheim-ServerSideMap)
 - [PlantEverything](https://thunderstore.io/c/valheim/p/Advize/PlantEverything/)
 - [Sailing](https://thunderstore.io/c/valheim/p/Smoothbrain/Sailing/)
+- [ServerCharacters](https://thunderstore.io/c/valheim/p/Smoothbrain/ServerCharacters/)
+- [MultiUserChest](https://thunderstore.io/c/valheim/p/MSchmoecker/MultiUserChest/)
 
 ### How to Use
 1) Download and run cumheim-mod-pack.exe from Releases -> 'Latest' version.
