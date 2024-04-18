@@ -10,7 +10,7 @@ Downloads and installs / uninstalls the following mods to your local Valheim dir
 ### How to Use
 1) Download and run cumheim-mod-pack.exe from Releases -> 'Latest' version.
 
-![CumHeim](https://github.com/IdotNuerk/CumHeim/tree/master/cumheim.jpg?raw=true)
+![CumHeim](https://github.com/IdotNuerk/CumHeim/blob/master/cumheim.JPG)
 
 2) Click Install/Uninstall.
 3) Wait for the program to finish. It will open Valheim to initialize BepInEx. Don't close Valheim - it will close automatically.
