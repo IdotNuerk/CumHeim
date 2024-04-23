@@ -14,7 +14,7 @@ use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 mod settings;
 
 const NUM_URLS: usize = 3;
-const MODS_JSON: &'static str = "mods.json";
+const MODS_JSON_URL: &'static str = "https://raw.githubusercontent.com/IdotNuerk/CumHeim/master/mods.json";
 const TOTAL_PROGRESS: usize = 4 + NUM_URLS;
 
 static RUNNING: AtomicBool = AtomicBool::new(false);
@@ -48,9 +48,12 @@ fn app() -> Result<(), eframe::Error> {
                     let uninstall_resp = uninstall_button.interact(egui::Sense::click());
                     if install_resp.clicked() {
                         RUNNING.store(true, Ordering::Release);
+                        PROGRESS.store(0, Ordering::Release);
                         thread::spawn(|| {
                             match install() {
-                                Ok(..) => {}
+                                Ok(..) => {
+                                    RUNNING.store(false, Ordering::Release);
+                                }
                                 Err(e) => { println!("{:?}", e) }
                             };
                         });
@@ -58,9 +61,12 @@ fn app() -> Result<(), eframe::Error> {
     
                     if uninstall_resp.clicked() {
                         RUNNING.store(true, Ordering::Release);
+                        PROGRESS.store(0, Ordering::Release);
                         thread::spawn(|| {
                             match uninstall() {
-                                Ok(..) => {}
+                                Ok(..) => {
+                                    RUNNING.store(false, Ordering::Release);
+                                }
                                 Err(e) => { println!("{:?}", e) }
                             };
                         });
@@ -126,6 +132,8 @@ fn uninstall() -> Result<(), io::Error> {
 }
 
 fn install() -> Result<(), std::io::Error> {
+    
+
     // Locate valheim steamapp dir
     let mut found_dir = None;
     if Path::new("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim").is_dir() {
@@ -159,25 +167,26 @@ fn install() -> Result<(), std::io::Error> {
         Some(valheim) => {
             println!("Found {:?}", valheim);
 
-            // Backup Valheim to .Valheim
+            // Backup Valheim to .Valheim if .Valheim doesn't exist
             let valheim_backup_str = valheim.replace("\\Valheim", "\\.Valheim");
             let valheim_backup_path = Path::new(&valheim_backup_str);
             if valheim_backup_path.is_dir() {
                 return Err(std::io::Error::new(std::io::ErrorKind::Other, ".Valheim path already exists."));
             }
-
-            match copy_dir::copy_dir(Path::new(&valheim), valheim_backup_path) {
-                Ok(..) => {}
-                Err(e) => { 
-                    println!("Failed to back up. Error: {:?}", e); 
-                    return Err(e); 
+            else {
+                match copy_dir::copy_dir(Path::new(&valheim), valheim_backup_path) {
+                    Ok(..) => {}
+                    Err(e) => { 
+                        println!("Failed to back up. Error: {:?}", e); 
+                        return Err(e); 
+                    }
                 }
             }
 
             PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
 
-            // Fill settings from file
-            let settings = settings::Settings::read_from_file(MODS_JSON).unwrap();
+            // Download mods.json from github
+            let settings = get_mods_json()?;
 
             // Download and extract BepInEx 
             match download_zip(&settings.bepinex.url, vec!(settings.bepinex.mapping), &valheim.clone()) {
@@ -222,6 +231,20 @@ fn install() -> Result<(), std::io::Error> {
     }
 
     Ok(())
+}
+
+fn get_mods_json() -> Result<settings::Settings, std::io::Error> {
+    let response = match ureq::get(MODS_JSON_URL).call() {
+        Ok(res) => res,
+        Err(err) => {
+            eprintln!("Error sending request: {}", err);
+            return Err(std::io::Error::new(io::ErrorKind::Other, err));
+        }
+    };
+
+    let settings: settings::Settings = response.into_json()?;
+    
+    Ok(settings)
 }
 
 fn download_zip(src_url: &str, move_from_to: Vec<Vec<String>>, base_dest_path: &str ) -> Result<(), std::io::Error> {
