@@ -230,6 +230,7 @@ fn get_mods_json() -> Result<settings::Settings, std::io::Error> {
 fn download_zip(src_url: &str, move_from_to: Vec<Vec<String>>, base_dest_path: &str ) -> Result<(), std::io::Error> {
     let get_resp: Result<ureq::Response, ureq::Error> = ureq::get(src_url) 
         .set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8")
+        .set("Cache-Control", "no-cache")
         .call();
 
     match get_resp {
