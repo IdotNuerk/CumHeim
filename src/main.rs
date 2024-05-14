@@ -6,7 +6,6 @@ use std::path::Path;
 use ureq;
 use std::io::{Read, Write};
 use zip;
-use copy_dir;
 use tempfile::{self, NamedTempFile};
 use eframe::egui;
 use std::thread;
@@ -63,11 +62,17 @@ fn app() -> Result<(), eframe::Error> {
                         RUNNING.store(true, Ordering::Release);
                         PROGRESS.store(0, Ordering::Release);
                         thread::spawn(|| {
-                            match uninstall() {
-                                Ok(..) => {
-                                    RUNNING.store(false, Ordering::Release);
+                            if let Ok(found_dir) = locate_valheim() {
+                                match uninstall(found_dir) {
+                                    Ok(..) => {
+                                        RUNNING.store(false, Ordering::Release);
+                                    }
+                                    Err(e) => { println!("{:?}", e) }
+                                };
+
+                                for _ in 0..3 + NUM_URLS {
+                                    PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
                                 }
-                                Err(e) => { println!("{:?}", e) }
                             };
                         });
                     }
@@ -83,7 +88,7 @@ fn app() -> Result<(), eframe::Error> {
     })
 }
 
-fn uninstall() -> Result<(), io::Error> {
+fn locate_valheim() -> Result<Option<String>, io::Error> {
     // Locate valheim steamapp dir
     let mut found_dir = None;
     if Path::new("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim").is_dir() {
@@ -112,75 +117,50 @@ fn uninstall() -> Result<(), io::Error> {
     // Increment progress bar
     PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
 
+    Ok(found_dir)
+}
+
+fn uninstall(found_dir: Option<String>) -> Result<(), io::Error> {
     match found_dir {
         Some(valheim) => {
-            let valheim_backup_str = valheim.replace("\\Valheim", "\\.Valheim");
-            let valheim_backup_path = Path::new(&valheim_backup_str);
-            if valheim_backup_path.is_dir() {
-                std::fs::remove_dir_all(valheim.clone())?;
-                std::fs::rename(valheim_backup_path, Path::new(&valheim))?;
-            }
+            let valheim_path = Path::new(&valheim);
+            let bepinex_dir = valheim_path.join("BepInEx");
+            let doorstop_dir = valheim_path.join("doorstop_libs");
+            let changelog = valheim_path.join("changelog.txt");
+            let doorstop_config = valheim_path.join("doorstop_config.ini");
+            let start_game_bepinex = valheim_path.join("start_game_bepinex.sh");
+            let start_server_bepinex = valheim_path.join("start_server_bepinex.sh");
+            let winhttp_dll = valheim_path.join("winhttp.dll");
+
+            if bepinex_dir.is_dir() { std::fs::remove_dir_all(bepinex_dir)?; }
+            if doorstop_dir.is_dir() { std::fs::remove_dir_all(doorstop_dir)?; }
+            if changelog.is_file() { std::fs::remove_file(changelog)?; }
+            if doorstop_config.is_file() { std::fs::remove_file(doorstop_config)?; }
+            if start_game_bepinex.is_file() { std::fs::remove_file(start_game_bepinex)?; }
+            if start_server_bepinex.is_file() { std::fs::remove_file(start_server_bepinex)?; }
+            if winhttp_dll.is_file() { std::fs::remove_file(winhttp_dll)?; }
         }
         None => {}
-    }
-
-    for _ in 0..3 + NUM_URLS {
-        PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
     }
 
     Ok(())
 }
 
 fn install() -> Result<(), std::io::Error> {
-    
-
     // Locate valheim steamapp dir
-    let mut found_dir = None;
-    if Path::new("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim").is_dir() {
-        found_dir = Some("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim".to_owned());
-    }
-    else if Path::new("C:\\Program Files\\Steam\\steamapps\\common\\Valheim").is_dir() {
-        found_dir = Some("C:\\Program Files\\Steam\\steamapps\\common\\Valheim".to_owned());
-    }
-    else {
-        let drives = get_drives();
-    
-        for d in drives {
-            let steamapps_dir = find_steamapps(Path::new(&d), 0);
-            match steamapps_dir {
-                Some(steamapps) => { 
-                    if Path::new(&(steamapps.clone() + "\\common\\Valheim")).is_dir() {
-                        found_dir = Some(steamapps + "\\common\\Valheim");
-                        break;
-                    } 
-                }
-                None => {}
-            }
-        }
-    }
+    let found_dir = locate_valheim()?;
 
     // Increment progress bar
     PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
     
     // If we found Valheim
-    match found_dir {
+    match found_dir.clone() {
         Some(valheim) => {
             println!("Found {:?}", valheim);
 
-            // Backup Valheim to .Valheim if .Valheim doesn't exist
-            let valheim_backup_str = valheim.replace("\\Valheim", "\\.Valheim");
-            let valheim_backup_path = Path::new(&valheim_backup_str);
-            if valheim_backup_path.is_dir() {
-                return Err(std::io::Error::new(std::io::ErrorKind::Other, ".Valheim path already exists."));
-            }
-            else {
-                match copy_dir::copy_dir(Path::new(&valheim), valheim_backup_path) {
-                    Ok(..) => {}
-                    Err(e) => { 
-                        println!("Failed to back up. Error: {:?}", e); 
-                        return Err(e); 
-                    }
-                }
+            // Check if bepinex is already installed
+            if Path::new(&valheim.clone()).join("BepInEx").is_dir() {
+                uninstall(found_dir)?;
             }
 
             PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
