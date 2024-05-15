@@ -17,7 +17,7 @@ wget https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/
 rm ssm.zip
 
 # PlantEverything
-wget https://thunderstore.io/package/download/NIFLHEIMBR/PlantEverything/1.11.5/ -O pe.zip
+wget https://thunderstore.io/package/download/Advize/PlantEverything/1.17.1/ -O pe.zip
 7z e pe.zip
 rm pe.zip
 
@@ -35,3 +35,8 @@ rm tp.zip
 wget https://thunderstore.io/package/download/Advize/PlantEasily/1.8.0/ -O pez.zip
 7z e pez.zip
 rm pez.zip
+
+# ServerSyncFix
+wget https://thunderstore.io/package/download/JereKuusela/Server_Sync_Fix/1.3.0/ -O ssf.zip
+7z e ssf.zip
+rm ssf.zip

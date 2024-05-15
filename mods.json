@@ -87,6 +87,15 @@
             "BepInEx\\plugins"
           ]
         ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/JereKuusela/Server_Sync_Fix/1.3.0/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
       }
     ]
   }
