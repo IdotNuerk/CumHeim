@@ -15,3 +15,8 @@ rm muc.zip
 wget https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/ServerSideMap.zip -O ssm.zip
 7z e ssm.zip
 rm ssm.zip
+
+# PlantEverything
+wget https://thunderstore.io/package/download/NIFLHEIMBR/PlantEverything/1.11.5/ -O pe.zip
+7z e pe.zip
+rm pe.zip
