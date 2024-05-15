@@ -20,3 +20,18 @@ rm ssm.zip
 wget https://thunderstore.io/package/download/NIFLHEIMBR/PlantEverything/1.11.5/ -O pe.zip
 7z e pe.zip
 rm pe.zip
+
+# AzuExtendedPlayerInventory
+wget https://thunderstore.io/package/download/Azumatt/AzuExtendedPlayerInventory/1.4.0/ -O aepi.zip
+7z e aepi.zip
+rm aepi.zip
+
+# TargetPortal
+wget https://thunderstore.io/package/download/Smoothbrain/TargetPortal/1.1.19/ -O tp.zip
+7z e tp.zip
+rm tp.zip
+
+# PlantEasily
+wget https://thunderstore.io/package/download/Advize/PlantEasily/1.8.0/ -O pez.zip
+7z e pez.zip
+rm pez.zip

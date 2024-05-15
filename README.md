@@ -2,13 +2,16 @@
 
 Downloads and installs / uninstalls the following mods to your local Valheim directory. For use on the **CumHeim** modded server.
 
-- [BepInEx](https://github.com/BepInEx/BepInEx) 
+- [BepInEx](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/) 
 - [Jotunn](https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/)
-- [ServerSideMap](https://github.com/Mydayyy/Valheim-ServerSideMap)
+- [ServerSideMap](https://thunderstore.io/c/valheim/p/Mydayyy/ServerSideMap/)
 - [PlantEverything](https://thunderstore.io/c/valheim/p/Advize/PlantEverything/)
 - [Sailing](https://thunderstore.io/c/valheim/p/Smoothbrain/Sailing/)
 - [ServerCharacters](https://thunderstore.io/c/valheim/p/Smoothbrain/ServerCharacters/)
 - [MultiUserChest](https://thunderstore.io/c/valheim/p/MSchmoecker/MultiUserChest/)
+- [AzuExtendedPlayerInventory](https://thunderstore.io/c/valheim/p/Azumatt/AzuExtendedPlayerInventory/)
+- [TargetPortal](https://thunderstore.io/c/valheim/p/Smoothbrain/TargetPortal/)
+- [PlantEasily](https://thunderstore.io/c/valheim/p/Advize/PlantEasily/)
 
 ### How to Use
 1) Download and run cumheim-mod-pack.exe from Releases -> 'Latest' version.

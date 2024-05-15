@@ -60,6 +60,33 @@
             "BepInEx\\plugins\\MultiUserChest"
           ]
         ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/Azumatt/AzuExtendedPlayerInventory/1.4.0/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/Smoothbrain/TargetPortal/1.1.19/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/Azumatt/AzuExtendedPlayerInventory/1.4.0/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
       }
     ]
   }
