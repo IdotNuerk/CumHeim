@@ -894,6 +894,7 @@ dependencies = [
  "serde_json",
  "tempfile",
  "ureq",
+ "walkdir",
  "windows 0.54.0",
  "zip",
 ]

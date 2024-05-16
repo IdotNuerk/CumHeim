@@ -10,11 +10,12 @@ use tempfile::{self, NamedTempFile};
 use eframe::egui;
 use std::thread;
 use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use walkdir::WalkDir;
 mod settings;
 
-const NUM_URLS: usize = 3;
+const NUM_URLS: usize = 9;
 const MODS_JSON_URL: &'static str = "https://raw.githubusercontent.com/IdotNuerk/CumHeim/master/mods.json";
-const TOTAL_PROGRESS: usize = 4 + NUM_URLS;
+const TOTAL_PROGRESS: usize = 5 + NUM_URLS;
 
 static RUNNING: AtomicBool = AtomicBool::new(false);
 static PROGRESS: AtomicU32 = AtomicU32::new(0);
@@ -70,7 +71,7 @@ fn app() -> Result<(), eframe::Error> {
                                     Err(e) => { println!("{:?}", e) }
                                 };
 
-                                for _ in 0..3 + NUM_URLS {
+                                for _ in 0..5 + NUM_URLS {
                                     PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
                                 }
                             };
@@ -100,22 +101,23 @@ fn locate_valheim() -> Result<Option<String>, io::Error> {
     else {
         let drives = get_drives();
 
-        for d in drives {
-            let steamapps_dir = find_steamapps(Path::new(&d), 0);
-            match steamapps_dir {
-                Some(steamapps) => { 
-                    if Path::new(&(steamapps.clone() + "\\common\\Valheim")).is_dir() {
-                        found_dir = Some(steamapps + "\\common\\Valheim");
-                        break;
-                    } 
+        for max_depth in 3..8 {
+            for root_dir in drives.clone() {
+                for entry in WalkDir::new(root_dir).max_depth(max_depth) {
+                    if let Ok(entry) = entry {
+                        if entry.path().ends_with(Path::new("common").join("Valheim")) {
+                            if let Some(valheim_dir) = entry.path().to_str() {
+                                return Ok(Some(valheim_dir.to_string()))
+                            }
+                        }
+                    }
                 }
-                None => {}
             }
         }
     }
 
     // Increment progress bar
-    PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 1, Ordering::Relaxed);
+    PROGRESS.store(PROGRESS.load(Ordering::Relaxed) + 2, Ordering::Relaxed);
 
     Ok(found_dir)
 }
@@ -334,40 +336,4 @@ fn get_drives() -> Vec<String> {
         }
     }
     drive_roots
-}
-
-fn find_steamapps(dir: &Path, depth: u32) -> Option<String> {
-    if depth > 3 {
-        return None;
-    }
-    else if depth == 1 {
-        println!("Checking in {:?}...", dir.display())
-    }
-
-    if dir.is_dir() {
-        let entries = fs::read_dir(dir);
-        match entries {
-            Ok(entries) => {
-                for entry in entries {
-                    match entry {
-                        Ok(e) => {
-                            let path = e.path();
-                            let pathstr = path.to_str().unwrap().to_owned() + "\\steamapps";
-                            let dircheck = Path::new(&pathstr);
-                            if dircheck.is_dir() {
-                                return Some(dircheck.to_str().unwrap().to_owned());
-                            }
-        
-                            if path.is_dir() {
-                                find_steamapps(&path, depth + 1);
-                            }
-                        }
-                        Err(..) => { return None; }
-                    }
-                }
-            }
-            Err(..) => {}
-        }
-    }
-    return None;
 }
