@@ -183,7 +183,16 @@ fn install() -> Result<(), std::io::Error> {
 
             match valheim_proc {
                 Ok(mut child) => {
-                    std::thread::sleep(time::Duration::from_secs(30));
+                    let bepinex_dir = Path::new(&valheim.clone()).join("BepInEx");
+                    let max_time = std::time::Duration::from_secs(300);
+                    let start = std::time::Instant::now();
+                    while !bepinex_dir.is_dir() {
+                        if std::time::Instant::now() - start > max_time {
+                            break;
+                        }
+                        std::thread::sleep(time::Duration::from_secs(1));
+                    }
+                    
                     match child.kill() {
                         Ok(..) => {}
                         Err(e) => { println!("Error closing Valheim.exe: {:?}", e) }
