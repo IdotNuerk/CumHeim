@@ -183,7 +183,7 @@ fn install() -> Result<(), std::io::Error> {
 
             match valheim_proc {
                 Ok(mut child) => {
-                    let bepinex_dir = Path::new(&valheim.clone()).join("BepInEx");
+                    let bepinex_dir = Path::new(&valheim.clone()).join("BepInEx").join("plugins");
                     let max_time = std::time::Duration::from_secs(300);
                     let start = std::time::Instant::now();
                     while !bepinex_dir.is_dir() {
