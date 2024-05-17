@@ -20,5 +20,5 @@ Downloads and installs / uninstalls the following mods to your local Valheim dir
 
 2) Click Install/Uninstall.
     ###### You may need to disable windows real-time virus protection. :)
-3) Wait for the program to finish. It will open Valheim to initialize BepInEx. Don't close Valheim - it will close automatically.
+3) Wait for the program to reach 100%.
 4) Play modded Valheim.
