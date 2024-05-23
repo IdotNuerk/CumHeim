@@ -96,6 +96,15 @@
             "BepInEx\\plugins"
           ]
         ]
+      },
+        {
+        "url": "https://thunderstore.io/package/download/Advize/PlantEasily/1.8.0/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
       }
     ]
   }
