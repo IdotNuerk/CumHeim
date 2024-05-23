@@ -12,6 +12,7 @@ Downloads and installs / uninstalls the following mods to your local Valheim dir
 - [AzuExtendedPlayerInventory](https://thunderstore.io/c/valheim/p/Azumatt/AzuExtendedPlayerInventory/)
 - [TargetPortal](https://thunderstore.io/c/valheim/p/Smoothbrain/TargetPortal/)
 - [PlantEasily](https://thunderstore.io/c/valheim/p/Advize/PlantEasily/)
+- [MultiCraft](https://thunderstore.io/c/valheim/p/Advize/PlantEasily/)
 
 ### How to Use
 1) Download and run cumheim-mod-pack.exe from Releases -> 'Latest' version.
