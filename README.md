@@ -13,6 +13,7 @@ Downloads and installs / uninstalls the following mods to your local Valheim dir
 - [TargetPortal](https://thunderstore.io/c/valheim/p/Smoothbrain/TargetPortal/)
 - [PlantEasily](https://thunderstore.io/c/valheim/p/Advize/PlantEasily/)
 - [MultiCraft](https://thunderstore.io/c/valheim/p/Advize/PlantEasily/)
+- [Build Camera](https://thunderstore.io/c/valheim/p/Azumatt/Build_Camera_Custom_Hammers_Edition/)
 
 ### How to Use
 1) Download and run cumheim-mod-pack.exe from Releases -> 'Latest' version.
