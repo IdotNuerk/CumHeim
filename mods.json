@@ -114,6 +114,15 @@
             "BepInEx\\plugins"
           ]
         ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/Azumatt/Build_Camera_Custom_Hammers_Edition/1.2.3/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
       }
     ]
   }
