@@ -40,3 +40,8 @@ rm pez.zip
 wget https://thunderstore.io/package/download/JereKuusela/Server_Sync_Fix/1.3.0/ -O ssf.zip
 7z e ssf.zip
 rm ssf.zip
+
+# NoSmokeStayLit
+wget https://thunderstore.io/package/download/JereKuusela/ESP/1.25.0/ -O esp.zip
+7z e esp.zip
+rm esp.zip
