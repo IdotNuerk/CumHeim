@@ -1,4 +1,4 @@
-cd /home/steam/valheim/BepInEx/plugins
+cd ~/valheim-server/config/bepinex/plugins
 rm -r *
 
 # Jotunn
