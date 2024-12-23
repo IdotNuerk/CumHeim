@@ -8,7 +8,7 @@
     },
     "mods": [
       {
-        "url": "https://thunderstore.io/package/download/ValheimModding/Jotunn/2.20.0/",
+        "url": "https://thunderstore.io/package/download/ValheimModding/Jotunn/2.22.0/",
         "mapping": [
           [
             "*",
@@ -17,7 +17,7 @@
         ]
       },
       {
-        "url": "https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.11/ServerSideMap.zip",
+        "url": "https://github.com/Mydayyy/Valheim-ServerSideMap/releases/download/v1.3.12/ServerSideMap.zip",
         "mapping": [
           [
             "*",
@@ -26,7 +26,7 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/Advize/PlantEverything/1.17.1/",
+        "url": "https://thunderstore.io/package/download/Advize/PlantEverything/1.18.2/",
         "mapping": [
           [
             "*",
@@ -44,7 +44,7 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/Smoothbrain/ServerCharacters/1.4.11/",
+        "url": "https://thunderstore.io/package/download/Smoothbrain/ServerCharacters/1.4.14/",
         "mapping": [
           [
             "*",
@@ -53,7 +53,7 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/MSchmoecker/MultiUserChest/0.5.10/",
+        "url": "https://thunderstore.io/package/download/MSchmoecker/MultiUserChest/0.6.0/",
         "mapping": [
           [
             "*",
@@ -62,7 +62,7 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/Azumatt/AzuExtendedPlayerInventory/1.4.0/",
+        "url": "https://thunderstore.io/package/download/Azumatt/AzuExtendedPlayerInventory/1.4.6/",
         "mapping": [
           [
             "*",
@@ -71,16 +71,7 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/Smoothbrain/TargetPortal/1.1.19/",
-        "mapping": [
-          [
-            "*",
-            "BepInEx\\plugins"
-          ]
-        ]
-      },
-      {
-        "url": "https://thunderstore.io/package/download/Azumatt/AzuExtendedPlayerInventory/1.4.0/",
+        "url": "https://thunderstore.io/package/download/Smoothbrain/TargetPortal/1.1.20/",
         "mapping": [
           [
             "*",
@@ -98,7 +89,7 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/Advize/PlantEasily/1.8.0/",
+        "url": "https://thunderstore.io/package/download/Advize/PlantEasily/2.0.2/",
         "mapping": [
           [
             "*",
@@ -116,7 +107,7 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/Azumatt/Build_Camera_Custom_Hammers_Edition/1.2.3/",
+        "url": "https://thunderstore.io/package/download/Azumatt/Build_Camera_Custom_Hammers_Edition/1.2.6/",
         "mapping": [
           [
             "*",
@@ -125,7 +116,7 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/TastyChickenLegs/NoSmokeStayLit/2.3.3/",
+        "url": "https://thunderstore.io/package/download/TastyChickenLegs/NoSmokeStayLit/2.3.4/",
         "mapping": [
           [
             "*",
