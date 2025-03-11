@@ -123,6 +123,15 @@
             "BepInEx\\plugins"
           ]
         ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/RandyKnapp/EpicLoot/0.10.7/",
+        "mapping": [
+          [
+            "plugins\\*",
+            "BepInEx\\plugins\\EpicLoot"
+          ]
+        ]
       }
     ]
   }
