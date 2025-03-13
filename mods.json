@@ -146,7 +146,7 @@
         "url": "https://thunderstore.io/package/download/Smoothbrain/Cooking/1.2.1/",
         "mapping": [
           [
-            "plugins/*",
+            "*",
             "BepInEx\\plugins"
           ]
         ]
@@ -155,7 +155,7 @@
         "url": "https://thunderstore.io/package/download/Azumatt/AzuCraftyBoxes/1.7.2/",
         "mapping": [
           [
-            "plugins/*",
+            "*",
             "BepInEx\\plugins"
           ]
         ]
