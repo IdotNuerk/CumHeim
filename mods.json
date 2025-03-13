@@ -125,11 +125,11 @@
         ]
       },
       {
-        "url": "https://thunderstore.io/package/download/RandyKnapp/EpicLoot/0.10.7/",
+        "url": "https://thunderstore.io/package/download/Smoothbrain/Jewelcrafting/1.5.33/",
         "mapping": [
           [
-            "plugins/*",
-            "BepInEx\\plugins\\EpicLoot"
+            "*",
+            "BepInEx\\plugins"
           ]
         ]
       },
