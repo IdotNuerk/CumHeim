@@ -15,6 +15,11 @@ Downloads and installs / uninstalls the following mods to your local Valheim dir
 - [MultiCraft](https://thunderstore.io/c/valheim/p/Advize/PlantEasily/)
 - [Build Camera](https://thunderstore.io/c/valheim/p/Azumatt/Build_Camera_Custom_Hammers_Edition/)
 - [No Smoke Stay Lit](https://thunderstore.io/c/valheim/p/TastyChickenLegs/NoSmokeStayLit/)
+- [Jewelcrafting](https://thunderstore.io/c/valheim/p/Smoothbrain/Jewelcrafting/)
+- [Odin Architect](https://thunderstore.io/c/valheim/p/OdinPlus/OdinArchitect/)
+- [Cooking](https://thunderstore.io/c/valheim/p/Smoothbrain/Cooking/)
+- [AzuCraftyBoxes](https://thunderstore.io/c/valheim/p/Azumatt/AzuCraftyBoxes/)
+- [Max Dungeon Rooms](https://thunderstore.io/c/valheim/p/Digitalroot/Max_Dungeon_Rooms/)
 
 ### How to Use
 1) Download and run cumheim-mod-pack.exe from Releases -> 'Latest' version.
