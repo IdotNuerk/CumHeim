@@ -173,7 +173,7 @@
         "url": "https://thunderstore.io/package/download/Searica/FortifySkillsRedux/1.5.3/",
         "mapping": [
           [
-            "plugins/*",
+            "*",
             "BepInEx\\plugins"
           ]
         ]
