@@ -177,6 +177,15 @@
             "BepInEx\\plugins"
           ]
         ]
+      },
+      {
+        "url": "https://thunderstore.io/package/download/Crystal/DigDeeper/1.1.5/",
+        "mapping": [
+          [
+            "*",
+            "BepInEx\\plugins"
+          ]
+        ]
       }
     ]
   }
