@@ -1,0 +1,8 @@
+[application]
+name = "Valheim Modloader"
+
+[bundle]
+identifier = "github.com/NickBuerk"
+publisher = "NickBuerk"
+icon = ["assets/icon.png"]
+
