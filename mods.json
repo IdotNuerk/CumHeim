@@ -21,5 +21,119 @@
     "name": "PlantEverything",
     "from": "plugins",
     "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "ServerCharacters",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "MSchmoecker",
+    "name": "MultiUserChest",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "TargetPortal",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "Network",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "Mining",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "Lumberjacking",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "Sailing",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "GracefulTeleportation",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "DedicatedServer",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "Building",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "Cooking",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Smoothbrain",
+    "name": "Backpacks",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Azumatt",
+    "name": "AzuExtendedPlayerInventory",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "JereKuusela",
+    "name": "Server_Sync_Fix",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Advize",
+    "name": "PlantEasily",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Azumatt",
+    "name": "Build_Camera_Custom_Hammers_Edition",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "MaxiMods",
+    "name": "MultiCraft",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "TastyChickenLegs",
+    "name": "NoSmokeStayLit",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Digitalroot",
+    "name": "Max_Dungeon_Rooms",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
   }
 ]
