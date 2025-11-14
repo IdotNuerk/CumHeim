@@ -71,14 +71,6 @@ fn app() -> Element {
         }
     });
 
-    use_effect(move || {
-        spawn(async move {
-            if let Ok(mods) = get_mods_json().await {
-                mods_json_info.set(mods);
-            }
-        });
-    });
-    
     let select_valheim_directory = move |_| {
         spawn(async move {
             if let Some(path) = open_directory_picker() {
@@ -117,6 +109,10 @@ fn app() -> Element {
             status.set("📥 Fetching mod information from Thunderstore...".to_string());
             
             let mut fetched_mods = Vec::new();
+
+            if let Ok(mods) = get_mods_json().await {
+                mods_json_info.set(mods);
+            }
             
             for info in mods_json_info.iter() {
                 let name = info.name.trim();

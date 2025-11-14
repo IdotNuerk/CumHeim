@@ -3,5 +3,23 @@
     "namespace": "BepInEx",
     "name": "BepInExPack",
     "from": "BepInEx"
+  },
+  {
+    "namespace": "ValheimModding",
+    "name": "Jotunn",
+    "from": "plugins",
+    "to": "BepInEx\\plugins\\Jotunn"
+  },
+  {
+    "namespace": "Mydayyy",
+    "name": "ServerSideMap",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "Advize",
+    "name": "PlantEverything",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
   }
 ]
