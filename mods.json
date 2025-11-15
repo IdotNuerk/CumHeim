@@ -113,6 +113,7 @@
   {
     "namespace": "Digitalroot",
     "name": "Max_Dungeon_Rooms",
+    "from": "plugins",
     "to": "BepInEx\\plugins"
   }
 ]
