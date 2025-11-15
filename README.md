@@ -4,9 +4,6 @@ Downloads and installs / uninstalls the following mods to your local Valheim dir
 
 ### How to Use
 1) Download and run the exe from Releases -> 'Latest' version.
-
-![CumHeim](https://github.com/IdotNuerk/CumHeim/blob/master/cumheim.JPG)
-
 2) Click Install/Uninstall.
     ###### You may need to disable windows real-time virus protection. :)
 3) Wait for the program to reach 100%.
