@@ -3,12 +3,43 @@ use serde::{Deserialize, Serialize};
 use core::time;
 use std::{path::PathBuf, process, time::Duration};
 mod bepmod;
+use dioxus::desktop::{Config, WindowBuilder};
 
 const MODS_JSON_URL: &'static str = "https://raw.githubusercontent.com/IdotNuerk/CumHeim/master/mods.json";
 
 fn main() {
+    let icon_path = std::path::PathBuf::from("assets/valheim.ico");
+    let icon_bytes = std::fs::read(&icon_path).expect("Failed to read icon file");
+    let icon_image = image::load_from_memory(&icon_bytes)
+        .expect("Failed to load icon image")
+        .to_rgba8();
+    let (width, height) = icon_image.dimensions();
+    
+    let icon = dioxus::desktop::tao::window::Icon::from_rgba(
+        icon_image.into_raw(),
+        width,
+        height
+    ).expect("Failed to create icon");
+    
+    let config = Config::new()
+        .with_window(
+            WindowBuilder::new()
+                .with_title("Valheim Mod Installer")
+                .with_decorations(false)
+                .with_resizable(false)
+                .with_inner_size(dioxus::desktop::wry::dpi::LogicalSize::new(950.0, 600.0))
+                .with_window_icon(Some(icon))
+                .with_decorations(true)
+                
+        )
+        .with_menu(None);
+    
     dioxus::LaunchBuilder::desktop()
+        .with_cfg(config)
         .launch(app);
+
+    // dioxus::LaunchBuilder::desktop()
+    //     .launch(app);
 }
 
 #[derive(Clone, PartialEq)]
@@ -106,7 +137,7 @@ fn app() -> Element {
     use_effect( move || {
         spawn(async move {
             loading_mods.set(true);
-            status.set("📥 Fetching mod information from Thunderstore...".to_string());
+            status.set("Fetching mod information from Thunderstore...".to_string());
             
             let mut fetched_mods = Vec::new();
 
@@ -211,7 +242,6 @@ fn app() -> Element {
                     Ok(_) => {
                         installed_count += 1;
                         status.set(format!("Installed BepInEx: v{}", bepinex_clone.version));
-                        // Try to find Valheim installation
                         
                         if existing_valheim_dir.is_none() {
                             status.set("Valheim installation not found when trying to install mods.".to_string());
@@ -238,7 +268,9 @@ fn app() -> Element {
                                     Err(e) => { status.set(format!("Error trying to close Valheim: {}", e)); }
                                 }
                             }
-                            Err(e) => { status.set(format!("Error starting Valheim with BepInEx: {}", e)); }
+                            Err(e) => { 
+                                status.set(format!("Error starting Valheim with BepInEx: {}", e)); 
+                            }
                         }
                         
                         // Download and extract each mod after bepinex
@@ -335,109 +367,116 @@ fn app() -> Element {
                     }
                     
                     if !mods.read().is_empty() {
-                        div {
-                            style: "background: white; border: 1px solid #ddd; border-radius: 5px; padding: 20px; margin: 20px 0;",
-                            
+                        div { 
+                            style: "display: grid; grid-template-columns: 1fr 300px; gap: 20px; margin: 20px 0;",
                             div {
-                                style: "display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;",
-                                h2 {
-                                    style: "margin: 0; font-size: 18px; color: #1b2838;",
-                                    "Mods to Install ({enabled_count} selected)"
-                                }
+                                style: "background: white; border: 1px solid #ddd; border-radius: 5px; padding: 20px; margin: 20px 0;",
+                                
                                 div {
-                                    button {
-                                        style: "background: #5c7e10; color: white; padding: 6px 12px; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; margin-right: 5px;",
-                                        onclick: select_all,
-                                        "Select All"
+                                    style: "display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;",
+                                    h2 {
+                                        style: "margin: 0; font-size: 18px; color: #1b2838;",
+                                        "Mods to Install ({enabled_count} selected)"
                                     }
-                                    button {
-                                        style: "background: #666; color: white; padding: 6px 12px; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;",
-                                        onclick: deselect_all,
-                                        "Deselect All"
+                                    div {
+                                        button {
+                                            style: "background: #5c7e10; color: white; padding: 6px 12px; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; margin-right: 5px;",
+                                            onclick: select_all,
+                                            "Select All"
+                                        }
+                                        button {
+                                            style: "background: #666; color: white; padding: 6px 12px; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;",
+                                            onclick: deselect_all,
+                                            "Deselect All"
+                                        }
                                     }
                                 }
-                            }
-                            
-                            div {
-                                style: "display: flex; flex-direction: column; gap: 10px;",
-                                for mod_item in mods.read().iter() {
-                                    div {
-                                        key: "{mod_item.id}",
-                                        style: "border: 1px solid #e0e0e0; border-radius: 4px; padding: 15px; background: #fafafa; cursor: pointer; transition: background 0.2s;",
-                                        onclick: {
-                                            let mod_id = mod_item.id.clone();
-                                            move |_| toggle_mod(mod_id.clone())
-                                        },
-                                        
+                                
+                                div {
+                                    style: "display: flex; flex-direction: column; gap: 10px;",
+                                    for mod_item in mods.read().iter() {
                                         div {
-                                            style: "display: flex; align-items: start; gap: 15px;",
-                                            input {
-                                                r#type: "checkbox",
-                                                checked: mod_item.enabled,
-                                                style: "margin-top: 2px; cursor: pointer; width: 18px; height: 18px; flex-shrink: 0;",
-                                            }
-                                            img {
-                                                src: "{mod_item.icon_url}",
-                                                style: "width: 64px; height: 64px; border-radius: 4px; object-fit: cover; flex-shrink: 0;",
-                                                alt: "{mod_item.name}"
-                                            }
+                                            key: "{mod_item.id}",
+                                            style: "border: 1px solid #e0e0e0; border-radius: 4px; padding: 15px; background: #fafafa; cursor: pointer; transition: background 0.2s;",
+                                            onclick: {
+                                                let mod_id = mod_item.id.clone();
+                                                move |_| toggle_mod(mod_id.clone())
+                                            },
+                                            
                                             div {
-                                                style: "flex: 1;",
-                                                h3 {
-                                                    style: "margin: 0 0 5px 0; font-size: 16px; color: #1b2838;",
-                                                    "{mod_item.name} "
-                                                    span {
-                                                        style: "font-size: 13px; color: #999; font-weight: normal;",
-                                                        "v{mod_item.version}"
-                                                    }
+                                                style: "display: flex; align-items: start; gap: 15px;",
+                                                input {
+                                                    r#type: "checkbox",
+                                                    checked: mod_item.enabled,
+                                                    style: "margin-top: 2px; cursor: pointer; width: 18px; height: 18px; flex-shrink: 0;",
                                                 }
-                                                p {
-                                                    style: "margin: 0; color: #666; font-size: 13px; line-height: 1.4;",
-                                                    "{mod_item.description}"
+                                                img {
+                                                    src: "{mod_item.icon_url}",
+                                                    style: "width: 64px; height: 64px; border-radius: 4px; object-fit: cover; flex-shrink: 0;",
+                                                    alt: "{mod_item.name}"
+                                                }
+                                                div {
+                                                    style: "flex: 1;",
+                                                    h3 {
+                                                        style: "margin: 0 0 5px 0; font-size: 16px; color: #1b2838;",
+                                                        "{mod_item.name} "
+                                                        span {
+                                                            style: "font-size: 13px; color: #999; font-weight: normal;",
+                                                            "v{mod_item.version}"
+                                                        }
+                                                    }
+                                                    p {
+                                                        style: "margin: 0; color: #666; font-size: 13px; line-height: 1.4;",
+                                                        "{mod_item.description}"
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        div {
-                            style: "display: flex; justify-content: center; align-items: center; min-height: 5vh; margin: 0; background-color: #f0f0f0; font-family: Arial, sans-serif;",
-            
+                            // Right side - Install panel (sticky)
                             div {
-                                style: "display: flex; gap: 10px; width: 100%; max-width: 600px; padding: 10px",
-                                button {
-                                    style: "{primary_style}",
-                                    // style: "background: #5c7e10; color: white; padding: 12px 24px; border: none; border-radius: 3px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%;",
-                                    disabled: install_is_processing() || uninstall_is_processing() || enabled_count == 0,
-                                    onmousedown: move |_| primary_pressed.set(true),
-                                    onmouseup: move |_| primary_pressed.set(false),
-                                    onmouseleave: move |_| primary_pressed.set(false),
-                                    onclick: download_to_steamapps,
+                                style: "position: sticky; top: 20px; align-self: start;",
+                                div {
+                                    style: "display: flex; justify-content: center; align-items: center; min-height: 5vh; margin: 0; background-color: #f0f0f0; font-family: Arial, sans-serif;",
+                    
+                                    div {
+                                        style: "display: flex; gap: 10px; width: 100%; max-width: 600px; padding: 10px",
+                                        button {
+                                            style: "{primary_style}",
+                                            // style: "background: #5c7e10; color: white; padding: 12px 24px; border: none; border-radius: 3px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%;",
+                                            disabled: install_is_processing() || uninstall_is_processing() || enabled_count == 0,
+                                            onmousedown: move |_| primary_pressed.set(true),
+                                            onmouseup: move |_| primary_pressed.set(false),
+                                            onmouseleave: move |_| primary_pressed.set(false),
+                                            onclick: download_to_steamapps,
 
-                                    if install_is_processing() {
-                                        Spinner {}
-                                        " Processing..."
-                                    } else {
-                                        "Install Selected Mods ({enabled_count})"
-                                    }
-                                }
+                                            if install_is_processing() {
+                                                Spinner {}
+                                                " Processing..."
+                                            } else {
+                                                "Install Selected ({enabled_count})"
+                                            }
+                                        }
 
-                                button {
-                                    // style: "background: #800000; color: white; padding: 10px 20px; border: none; border-radius: 3px; cursor: pointer; font-size: 14px;",
-                                    style: "{secondary_style}",
-                                    disabled: install_is_processing() || uninstall_is_processing(),
-                                    onmousedown: move |_| secondary_pressed.set(true),
-                                    onmouseup: move |_| secondary_pressed.set(false),
-                                    onmouseleave: move |_| secondary_pressed.set(false),
-                                    onclick: uninstall_mods,
+                                        button {
+                                            // style: "background: #800000; color: white; padding: 10px 20px; border: none; border-radius: 3px; cursor: pointer; font-size: 14px;",
+                                            style: "{secondary_style}",
+                                            disabled: install_is_processing() || uninstall_is_processing(),
+                                            onmousedown: move |_| secondary_pressed.set(true),
+                                            onmouseup: move |_| secondary_pressed.set(false),
+                                            onmouseleave: move |_| secondary_pressed.set(false),
+                                            onclick: uninstall_mods,
 
-                                    if uninstall_is_processing() {
-                                        Spinner {}
-                                        " Processing..."
-                                    } else {
-                                        "Uninstall"
+                                            if uninstall_is_processing() {
+                                                Spinner {}
+                                                " Processing..."
+                                            } else {
+                                                "Uninstall"
+                                            }
+                                        }
                                     }
                                 }
                             }
