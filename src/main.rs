@@ -8,7 +8,7 @@ use dioxus::desktop::{Config, WindowBuilder};
 const MODS_JSON_URL: &'static str = "https://raw.githubusercontent.com/IdotNuerk/CumHeim/master/mods.json";
 
 fn main() {
-    let icon_path = std::path::PathBuf::from("assets/valheim.ico");
+    let icon_path = std::path::PathBuf::from("icons/icon.ico");
     let icon_bytes = std::fs::read(&icon_path).expect("Failed to read icon file");
     let icon_image = image::load_from_memory(&icon_bytes)
         .expect("Failed to load icon image")
@@ -37,9 +37,6 @@ fn main() {
     dioxus::LaunchBuilder::desktop()
         .with_cfg(config)
         .launch(app);
-
-    // dioxus::LaunchBuilder::desktop()
-    //     .launch(app);
 }
 
 #[derive(Clone, PartialEq)]
