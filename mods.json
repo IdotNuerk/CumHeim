@@ -115,5 +115,11 @@
     "name": "Max_Dungeon_Rooms",
     "from": "plugins",
     "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "ZenDragon",
+    "name": "ZenPlayer",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
   }
 ]
