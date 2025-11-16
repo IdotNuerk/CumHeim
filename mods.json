@@ -118,6 +118,12 @@
   },
   {
     "namespace": "ZenDragon",
+    "name": "Zen_ModLib",
+    "from": "plugins",
+    "to": "BepInEx\\plugins"
+  },
+  {
+    "namespace": "ZenDragon",
     "name": "ZenPlayer",
     "from": "plugins",
     "to": "BepInEx\\plugins"
