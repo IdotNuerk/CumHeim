@@ -62,11 +62,6 @@
   },
   {
     "namespace": "Smoothbrain",
-    "name": "DedicatedServer",
-    "to": "BepInEx\\plugins"
-  },
-  {
-    "namespace": "Smoothbrain",
     "name": "Cooking",
     "to": "BepInEx\\plugins"
   },
