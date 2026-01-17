@@ -57,11 +57,6 @@
   },
   {
     "namespace": "Smoothbrain",
-    "name": "GracefulTeleportation",
-    "to": "BepInEx\\plugins"
-  },
-  {
-    "namespace": "Smoothbrain",
     "name": "Cooking",
     "to": "BepInEx\\plugins"
   },
