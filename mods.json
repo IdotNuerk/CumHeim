@@ -76,11 +76,6 @@
     "to": "BepInEx\\plugins"
   },
   {
-    "namespace": "JereKuusela",
-    "name": "Server_Sync_Fix",
-    "to": "BepInEx\\plugins"
-  },
-  {
     "namespace": "Advize",
     "name": "PlantEasily",
     "to": "BepInEx\\plugins"
